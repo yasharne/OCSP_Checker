@@ -29,7 +29,7 @@ openssl s_client -showcerts -connect $URL:$PORT < /dev/null 2>&1 |  sed -n '/---
 TMP_CHAIN_CERT_FILE=$CHAIN_CERT_FILE.tmp
 
 #Removing the webpage certificate from the chain
-grep -Fvxf $DESTINATION_CERT_FILE $CHAIN_CERT_FILE > $TMP_CHAIN_CERT_FILE
+awk 'NR==FNR{a[$0]--;next} (++a[$0] > 0)' $DESTINATION_CERT_FILE $CHAIN_CERT_FILE > $TMP_CHAIN_CERT_FILE
 mv $TMP_CHAIN_CERT_FILE $CHAIN_CERT_FILE
 
 #Adding the HEADER and the FOOTER
